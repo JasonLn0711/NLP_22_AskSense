@@ -1,0 +1,38 @@
+# Jupyter notebooks
+.ipynb_checkpoints/
+ipynb/*.ipynb
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+.venv/
+venv/
+env/
+ENV/
+
+# Cache folder for precomputed embeddings
+cache/
+
+# Streamlit secrets file (do not commit API keys or sensitive info)
+.streamlit/secrets.toml
+
+# Log files
+*.log
+
+# SQLite database files (if any)
+*.sqlite3
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# macOS Finder files
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Environment variable files
+.env
