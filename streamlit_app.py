@@ -2,8 +2,15 @@ import warnings
 warnings.filterwarnings("ignore", message=".*missing ScriptRunContext.*")
 
 import streamlit as st
+# 頁面設定
+st.set_page_config(
+    page_title="AskSense 詐騙檢測工具",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 from collections import defaultdict
 from search_engine import SemanticSearchEngine
+import pandas as pd
 
 # 模型快取
 @st.cache_resource
@@ -22,7 +29,7 @@ stories_df = load_stories()
 
 # 快取查詢結果，避免反覆計算相同 query
 @st.cache_data(ttl=600)
-def cached_search(query: str, top_k: int = 10):
+def cached_search(query:str, top_k:int=10):
     return engine.search(query, top_k=top_k)
 
 @st.cache_data(ttl=600)
@@ -33,20 +40,29 @@ def cached_analysis(query: str):
 def cached_highlight(query: str):
     return engine.highlight_keywords(query)
 
-# 頁面設定
-st.set_page_config(
-    page_title="AskSense 詐騙檢測工具",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Sidebar: Developer Info & Expertise
 with st.sidebar:
     st.header("專案簡易說明")
     st.markdown(
         """
-        這個工具讓你可以貼上任意文字，快速標示出可能有風險或問題的句子。  
-        它會記憶你最近的檢查結果，重複檢查相同文字，速度會更快。  
+        🔍「AskSense 詐騙檢測工具」是一款能讓你可以貼上任意文字，快速標示出可能有風險或問題的句子的程式。我們的功能如下：
+
+        1. **語意搜尋 (Semantic Search)**
+           - 透過 SBERT 模型，將輸入文字與詐騙資料庫比對。
+
+        2. **逐句風險分析 (Sentence Risk Analysis)**
+           - 判定風險等級：紅 (高)、黃 (中)、綠 (低)。
+
+        3. **關鍵詞擷取與標示 (Keyword Highlighting)**
+           - 自動擷取影響判斷的關鍵詞 (hits)，並在原文中標示 (highlighted)。
+
+        4. **效能優化與安全設計**
+           - 查詢與分析皆採快取機制，避免重複計算相同輸入。
+
+        5. **友善連結**
+           - 提供台灣官方防詐資源連結：[165 防詐達人](https://165.npa.gov.tw)，方便深入查詢。
+
         非常適合想要輕鬆找出自己文字中潛在安全或內容風險的任何人！
         """
     )
@@ -54,14 +70,8 @@ with st.sidebar:
     st.header("開發者資訊")
     st.markdown(
         """
-        **背景**
+        **Jn77**
         - 國立陽明交通大學 資訊工程學系
-        - AI 與資安研究
-
-        **專長**
-        - 自然語言處理 (NLP)
-        - 深度學習模型開發 (SBERT)
-        - 系統資安與防護策略
         """
     )
     st.markdown("© 2025 JN AskSense. All rights reserved.")
@@ -120,7 +130,7 @@ if st.button('開始分析') and query:
     main_type = top_types[0][0] if top_types else None
     if main_type:
         st.markdown(f"**{main_type}** 案例示範：")
-        examples = stories_df[stories_df['type'] == main_type]['Content'].tolist()
+        examples = stories_df[stories_df['type'] == main_type]['content'].tolist()
         for ex in examples[:3]:  # 前3個案例
             st.write(f"- {ex}")
 

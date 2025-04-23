@@ -13,22 +13,22 @@ class SemanticSearchEngine:
         cache_dir: str = 'cache',
         batch_size: int = 64
     ):
-        # 載模型
+        # Load SBERT model
         self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
 
-        # 讀取 CSV
+        # Read CSV with content,type
         base = os.path.dirname(__file__)
-        csv_file = os.path.join(base, csv_path)
-        df = pd.read_csv(csv_file, dtype=str)
+        df = pd.read_csv(os.path.join(base, csv_path), dtype=str)
         df.fillna('', inplace=True)
         self.contents = df['content'].tolist()
         self.types = df['type'].tolist()
-        self.platforms = df['platform'].tolist()
 
-        # 快取 Embeddings
+        # Prepare cache path
         os.makedirs(os.path.join(base, cache_dir), exist_ok=True)
         emb_file = os.path.join(base, cache_dir,
-                                os.path.splitext(os.path.basename(csv_path))[0] + '_embeddings.pt')
+            os.path.splitext(os.path.basename(csv_path))[0] + '_embeddings.pt')
+
+        # Load or compute embeddings
         if os.path.exists(emb_file):
             self.embeddings = torch.load(emb_file)
         else:
@@ -40,23 +40,18 @@ class SemanticSearchEngine:
             )
             torch.save(self.embeddings, emb_file)
 
-        # 其他參數
+        # Risk & keywords
         self.risk_threshold = risk_threshold
         self.keywords = keywords or ['匯款', '限時', '官方', '165']
 
-    def search(self, query: str, top_k: int = 3):
+    def search(self, query: str, top_k: int = 10):
         q_emb = self.model.encode(query, convert_to_tensor=True)
         scores = util.pytorch_cos_sim(q_emb, self.embeddings)[0]
         top = scores.topk(k=top_k)
-        results = []
-        for idx, score in zip(top.indices.tolist(), top.values.tolist()):
-            results.append({
-                'content': self.contents[idx],
-                'type': self.types[idx],
-                'platform': self.platforms[idx],
-                'score': float(score)
-            })
-        return results
+        return [
+            {'content': self.contents[i], 'type': self.types[i], 'score': float(scores[i])}
+            for i in top.indices
+        ]
 
     def sentence_analysis(self, text: str):
         sents = [s.strip() for s in re.split(r'(?<=[。！？])', text) if s.strip()]
