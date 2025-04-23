@@ -1,0 +1,15 @@
+sentence-transformers>=2.2.2
+torch>=2.0.0
+numpy>=1.22.0
+scipy>=1.7.3
+pandas>=2.0.0
+
+# Optional visualization or extensions
+matplotlib>=3.5.0
+scikit-learn>=1.1.0
+
+# CLI or interface libraries (optional)
+rich>=13.3.0
+
+# Web GUI
+streamlit>=1.25.0
