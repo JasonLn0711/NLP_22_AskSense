@@ -28,11 +28,26 @@ class SemanticSearchEngine:
         emb_file = os.path.join(base, cache_dir,
             os.path.splitext(os.path.basename(csv_path))[0] + '_embeddings.pt')
 
-        # Load or compute embeddings
+        # Update: Load or compute embeddings
         if os.path.exists(emb_file):
-            self.embeddings = torch.load(emb_file)
-        else:
-            self.embeddings = self.model.encode(
+             try:
+                 # force load on CPU, catches GPU/format mismatches
+                 self.embeddings = torch.load(
+                     emb_file,
+                     map_location=torch.device('cpu')
+                 )
+             except Exception as e:
+                 # fallback: recompute if unpickling fails
+                 print(f"⚠️ failed to load embeddings ({e}), recomputing…")
+                 self.embeddings = self.model.encode(
+                     self.contents,
+                     batch_size=batch_size,
+                     convert_to_tensor=True,
+                     show_progress_bar=True
+                 )
+                 torch.save(self.embeddings, emb_file)
+         else:
+             self.embeddings = self.model.encode(
                 self.contents,
                 batch_size=batch_size,
                 convert_to_tensor=True,
