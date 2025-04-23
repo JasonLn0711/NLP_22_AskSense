@@ -43,25 +43,20 @@ def cached_highlight(query: str):
 
 # Sidebar: Developer Info & Expertise
 with st.sidebar:
-    st.header("專案簡易說明")
+    st.header("🔍「AskSense 詐騙檢測工具」")
     st.markdown(
         """
-        🔍「AskSense 詐騙檢測工具」是一款能讓你可以貼上任意文字，快速標示出可能有風險或問題的句子的程式。我們的功能如下：
+        這是一款能讓你可以貼上任意文字，快速標示出可能有風險或問題的句子的程式。我們的功能如下：
 
-        1. **語意搜尋 (Semantic Search)**
-           - 透過 SBERT 模型，將輸入文字與詐騙資料庫比對。
+        1. **語意搜尋 (Semantic Search)**：透過 SBERT 模型，將輸入文字與詐騙資料庫比對。
 
-        2. **逐句風險分析 (Sentence Risk Analysis)**
-           - 判定風險等級：紅 (高)、黃 (中)、綠 (低)。
+        2. **逐句風險分析 (Sentence Risk Analysis)**：判定風險等級：紅 (高)、黃 (中)、綠 (低)。
 
-        3. **關鍵詞擷取與標示 (Keyword Highlighting)**
-           - 自動擷取影響判斷的關鍵詞 (hits)，並在原文中標示 (highlighted)。
+        3. **關鍵詞擷取與標示 (Keyword Highlighting)**：自動擷取影響判斷的關鍵詞 (hits)，並在原文中標示 (highlighted)。
 
-        4. **效能優化與安全設計**
-           - 查詢與分析皆採快取機制，避免重複計算相同輸入。
+        4. **效能優化與安全設計**：查詢與分析皆採快取機制，避免重複計算相同輸入。
 
-        5. **友善連結**
-           - 提供台灣官方防詐資源連結：[165 防詐達人](https://165.npa.gov.tw)，方便深入查詢。
+        5. **友善連結**：提供台灣官方防詐資源連結 [165 防詐達人](https://165.npa.gov.tw)，方便深入查詢。
 
         非常適合想要輕鬆找出自己文字中潛在安全或內容風險的任何人！
         """
@@ -74,7 +69,7 @@ with st.sidebar:
         - 國立陽明交通大學 資訊工程學系
         """
     )
-    st.markdown("© 2025 JN AskSense. All rights reserved.")
+    st.markdown("© 2025 JN AskSense. 🔑 All rights reserved.")
 
 # 主區域：標題與輸入
 st.title('🔍 AskSense 詐騙文字檢測 & 語意搜尋工具')
