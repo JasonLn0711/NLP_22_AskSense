@@ -15,7 +15,7 @@ import pandas as pd
 # 模型快取
 @st.cache_resource
 def get_engine():
-    return SemanticSearchEngine('data/scam_dataset_tw_54500.csv', risk_threshold=0.7)
+    return SemanticSearchEngine('data/scam_dataset_tw_10000.csv', risk_threshold=0.7)
 
 # 讀取故事庫
 @st.cache_data(ttl=600)
