@@ -52,8 +52,8 @@ class SemanticSearchEngine:
                 batch_size=batch_size,
                 convert_to_tensor=True,
                 show_progress_bar=True
-            )
-            torch.save(self.embeddings, emb_file)
+             )
+             torch.save(self.embeddings, emb_file)
 
         # Risk & keywords
         self.risk_threshold = risk_threshold
