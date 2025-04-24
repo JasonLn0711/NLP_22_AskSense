@@ -24,13 +24,7 @@ def load_stories():
     df.fillna('', inplace=True)
     return df
 
-# Check if the model is available
-if st.button("Initialize model"):
-    with st.spinner("Loading AI model… this can take 30–60 seconds"):
-        engine = load_engine()
-    st.success("Model ready!")
 engine = get_engine()
-
 stories_df = load_stories()
 
 # 快取查詢結果，避免反覆計算相同 query
@@ -99,10 +93,16 @@ if st.button('開始分析') and query:
             key=lambda x: x[1], reverse=True
         )[:3]
 
+    scam_yn = False
+
     # 顯示最可能 Top3 類型
     st.subheader('🚩 最可能的 3 種詐騙類型')
     for t, sc in top_types:
-        st.markdown(f"- **{t}** (最高相似度: {sc:.4f})")
+        if sc > 0.55:
+            st.markdown(f"- **{t}** (最高相似度: {sc:.4f})")
+            scam_yn = True
+        else:
+            st.markdown("聽起來...，不太像是詐騙訊息喔！")
 
     # 顯示關鍵詞和標示
     if hits:
@@ -129,7 +129,7 @@ if st.button('開始分析') and query:
     # 類似詐騙案例
     st.subheader('💡 類似詐騙案例')
     main_type = top_types[0][0] if top_types else None
-    if main_type:
+    if main_type and scam_yn:
         st.markdown(f"**{main_type}** 案例示範：")
         examples = stories_df[stories_df['type'] == main_type]['content'].tolist()
         for ex in examples[:3]:  # 前3個案例
