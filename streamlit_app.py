@@ -24,7 +24,13 @@ def load_stories():
     df.fillna('', inplace=True)
     return df
 
+# Check if the model is available
+if st.button("Initialize model"):
+    with st.spinner("Loading AI model… this can take 30–60 seconds"):
+        engine = load_engine()
+    st.success("Model ready!")
 engine = get_engine()
+
 stories_df = load_stories()
 
 # 快取查詢結果，避免反覆計算相同 query
