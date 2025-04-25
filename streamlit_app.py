@@ -19,6 +19,7 @@ import pandas as pd
 MODEL_DIR = "models/paraphrase-multilingual-MiniLM-L12-v2"
 ZIP_PATH  = "models/miniLM.zip"
 GDRIVE_ID = st.secrets["gdrive_model_id"]
+GDRIVE_URL = f"https://drive.google.com/uc?id={GDRIVE_ID}&export=download"
 
 # 模型快取
 @st.cache_resource
@@ -26,11 +27,13 @@ def load_model():
     # 1) download once per container
     if not os.path.exists(MODEL_DIR):
         # fetch from Drive
-        gdown.download(
-          id=GDRIVE_ID,
+        success = gdown.download(
+          id=GDRIVE_URL,
           output=ZIP_PATH,
           quiet=False
         )
+        if success is None:
+            raise RuntimeError("Model download failed: please check Drive ID and sharing settings.")
         # unzip into MODEL_DIR
         with zipfile.ZipFile(ZIP_PATH, "r") as z:
             z.extractall("models/")
