@@ -1,3 +1,7 @@
+import os
+import zipfile
+import gdown
+
 import warnings
 warnings.filterwarnings("ignore", message=".*missing ScriptRunContext.*")
 
@@ -12,8 +16,31 @@ from collections import defaultdict
 from search_engine import SemanticSearchEngine
 import pandas as pd
 
+MODEL_DIR = "models/paraphrase-multilingual-MiniLM-L12-v2"
+ZIP_PATH  = "models/miniLM.zip"
+GDRIVE_ID = st.secrets["gdrive_model_id"]
+
 # 模型快取
 @st.cache_resource
+def load_model():
+    # 1) download once per container
+    if not os.path.exists(MODEL_DIR):
+        # fetch from Drive
+        gdown.download(
+          id=GDRIVE_ID,
+          output=ZIP_PATH,
+          quiet=False
+        )
+        # unzip into MODEL_DIR
+        with zipfile.ZipFile(ZIP_PATH, "r") as z:
+            z.extractall("models/")
+    # 2) load from local
+    return SentenceTransformer(MODEL_DIR, local_files_only=True)
+
+st.title("AskSense")
+model = load_model()
+st.success("Model loaded!")
+
 def get_engine():
     return SemanticSearchEngine('data/scam_dataset_tw_10000.csv', risk_threshold=0.7)
 
@@ -66,7 +93,7 @@ with st.sidebar:
     st.markdown(
         """
         **Jn77**
-        - 國立陽明交通大學 資訊工程學系
+        - 國立陽明交通大學資訊學院 研究生
         """
     )
     st.markdown("© 2025 JN AskSense. 🔑 All rights reserved.")
