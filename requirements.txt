@@ -1,8 +1,11 @@
-sentence-transformers>=2.2.2
 torch>=2.0.0
 numpy>=1.22.0
 scipy>=1.7.3
 pandas>=2.0.0
+
+# miniLM model imported from external source - Google Drive
+gdown
+sentence-transformers>=2.2.2
 
 # Optional visualization or extensions
 matplotlib>=3.5.0
