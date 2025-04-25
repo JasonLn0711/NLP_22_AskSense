@@ -19,7 +19,7 @@ import pandas as pd
 MODEL_DIR = "models/paraphrase-multilingual-MiniLM-L12-v2"
 ZIP_PATH  = "models/miniLM.zip"
 GDRIVE_ID = st.secrets["gdrive_model_id"]
-GDRIVE_URL = f"https://drive.google.com/file/d/{GDRIVE_ID}/view?usp=sharing"
+GDRIVE_URL = f"https://drive.google.com/file/d/{GDRIVE_ID}/view"
 
 # 模型快取
 @st.cache_resource
