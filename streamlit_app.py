@@ -30,7 +30,7 @@ def load_model():
         success = gdown.download(
           id=GDRIVE_URL,
           output=ZIP_PATH,
-          quiet=False
+          quiet=True
         )
         if success is None:
             raise RuntimeError("Model download failed: please check Drive ID and sharing settings.")
