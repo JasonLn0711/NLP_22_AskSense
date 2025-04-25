@@ -5,4 +5,4 @@
 level = "error"
 
 # Import miniLM from external source like Google Drive
-gdrive_model_id = "https://drive.google.com/file/d/13Wcqq5uZkBrSARcbLPZHrXqTiE9XfGsp/view?usp=sharing"
+gdrive_model_id = "https://drive.google.com/file/d/13Wcqq5uZkBrSARcbLPZHrXqTiE9XfGsp"
