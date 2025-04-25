@@ -1,8 +1,8 @@
 # .streamlit/config.toml
 
+[logger]
 # Import miniLM from external source like Google Drive
 gdrive_model_id = "https://drive.google.com/file/d/13Wcqq5uZkBrSARcbLPZHrXqTiE9XfGsp"
 
-[logger]
 # Only show messages at “error” level or above (hides lower-level warnings)
 level = "error"
